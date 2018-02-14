@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Power of (JavaScript) codemods</title>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Shower Theme -->
+    <link rel="stylesheet" href="vendors/shower-ribbon/styles/screen-16x10.css"/>
+    <link rel="stylesheet" href="vendors/shower-warsawjs/styles/main.css"/>
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="vendors/prism/prism.css"/>
+    <link rel="stylesheet" href="modules/custom-prism.css"/>
+</head>
+<body class="shower list">
+    <header class="caption">
+        <h1>WarsawJS Slides: Power of (JavaScript) codemods</h1>
+        <p>We talk about JavaScript. Each month in Warsaw, Poland.</p>
+    </header>
+
+    <section class="slide front-page">
+        <div class="logo">
+            <!-- Logo WarsawJS -->
+            <img src="pictures/logo/warsawjs-logo-light.png">
+        </div>
+        <div class="details">
+            <!-- 1. Avatar -->
+            <img src="pictures/andriy_mykulyak.jpg" alt="Speaker"/>
+
+            <!-- 2. Speaker -->
+            <h2>Andriy Mykulyak</h2>
+
+            <!-- 3. Presentation title -->
+            <h2><strong>"Power of (JavaScript) codemods"</strong></h2>
+
+            <!-- 4. Presentation date -->
+            <h2>2018-02-14</h2>
+
+            <!-- 5. Contact the speaker -->
+            <h2>
+              <a href="http://twitter.com/amykulyak">@amykulyak</a>
+              <a href="https://www.linkedin.com/in/andriy-mykulyak-b0001a26">LinkedIn</a>
+              <a href="mailto:mykulyak@gmail.com">Gmail</a>
+            </h2>
+        </div>
+    </section>
+
+    <section class="slide" itemscope itemtype="http://schema.org/Person">
+        <div>
+            <h2>Who am I ?</h2>
+
+            <h3 itemprop="jobTitle">Senior software consultant</h3>
+
+            <p itemscope itemtype="https://schema.org/Organization">
+                <span itemprop="name">@ <a href="http://www.shedul.com/" target="_blank">Shedul</a></span>,
+                <span itemprop="location">Warsaw</span>
+            </p>
+
+            <p>
+                <span itemprop="knows">
+                    Full stack developer. Like challenges, JavaScript and Python.
+                    <br/>
+                    Privately is passionate about triathlon.
+                </span>
+            </p>
+
+            <p class="note">"Do. Or do not. There is no try" (c) Yoda</p>
+        </div>
+    </section>
+
+    <section class="slide">
+      <h2>The only thing is permanent is change !</h2>
+      This is so true in the IT. We need to be prepared for it !
+    </section>
+
+    <section class="slide">
+      <h2>Refactoring</h2>
+      Refactorng is the process of restructuring existing source code without changing
+      its external behaviour.
+    </section>
+
+    <section class="slide">
+      <h2>It in easy in the small scale</h2>
+      One class, several methods ... This can be done manually.
+    </section>
+
+    <section class="slide">
+      <h2>But what if the change is large ?</h2>
+      Think of renaming 100+ classes according to some naming schema ...
+      Modifying imports ... Changing signature of some library function ...
+    </section>
+
+    <section class="slide">
+      <h2>We need tools to support us</h2>
+      At least partially !
+    </section>
+
+    <section class="slide">
+      <h2>Real life example - from</h2>
+      <pre>
+        <code class="language-jsx line-numbers">
+          &lt;Form&gt;
+            &lt;Label&gt;Some label&lt;/Label&gt;
+            &lt;Input hint="Hint text" /&gt;
+            ...
+          &lt;/Form&gt;
+        </code>
+      </pre>
+    </section>
+
+    <section class="slide">
+      <h2>Real life example - to</h2>
+      <pre>
+        <code class="language-jsx line-numbers">
+          &lt;Form&gt;
+            &lt;Label tid="123"&gt;Some label&lt;/Label&gt;
+            &lt;Input hint={tr("124", "Hint text")} /&gt;
+            ...
+          &lt;/Form&gt;
+        </code>
+      </pre>
+    </section>
+
+    <section class="slide">
+      <h2>Real life example</h2>
+      900 files, 15000+ replacements => couple of liters of coffee, almost two night w/o
+      much sleep !
+    </section>
+
+    <section class="slide">
+      <h2>And then I started to search ...</h2>
+      And found that others also had this problem ... also found ... codemods !
+    </section>
+
+    <section class="slide">
+      <h2>What is codemod ?</h2>
+      <blockquote>
+        Codemod is a tool/library to assist you with large-scale codebase refactors that
+        can be partially automated but still require human oversight and occasional intervention.
+      </blockquote>
+    </section>
+
+    <section class="slide">
+      <h2>What this talk is about, anyway ?</h2>
+      This talk is about codemods. But not everything about them. I will concentrate on:
+
+      <ul>
+        <li>use existing codemods and tools</li>
+        <li>find materials to start writing ours</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Tools - AST Explorer</h2>
+      <a href="http://astexplorer.net/" target="_blank">http://astexplorer.net/</a>
+      <p>Online sandbox for language inspection and transformation tools.</p>
+    </section>
+
+    <section class="slide">
+      <h2>Tools - jscodeshift</h2>
+      <p>A tool to run codemods on multiple files.</p>
+    </section>
+
+    <section class="slide">
+      <h2>Tools - recast</h2>
+      <a
+        href="https://github.com/benjamn/recast"
+        target="_blank"
+      >https://github.com/benjamn/recast</a>
+      <p>A library for AST to AST transformation and non-destructive printing</p>
+    </section>
+
+    <section class="slide">
+      <h2>Tools - ast-types</h2>
+      <a
+        href="https://github.com/benjamn/ast-types"
+        target="_blank"
+      >https://github.com/benjamn/ast-types</a>
+    </section>
+
+    <section class="slide">
+      <h2>Tools - Existing codemods</h2>
+      <ul>
+        <li><a href="https://github.com/cpojer/js-codemod/" target="_blank">js-codemods</a></li>
+        <li><a href=""></a></li>
+        <li><a href="https://github.com/reactjs/react-codemod" target="_blank">react-codemods</a></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>How to use all this goodness ?</h2>
+      <pre>
+        <code class="language-shell">
+          &gt; npm install jscodeshift
+          &gt; npm install js-codemod
+          &gt; npm run jscodeshift -t js-codemod/transforms/object-shorthand.js PATH
+        </code>
+      </pre>
+    </section>
+
+    <section class="slide">
+      <h2>What if I need more ?</h2>
+      No existing plugins suit your needs. Then write your own !
+    </section>
+
+    <section class="slide">
+      <h2>Anatomy of a codemod</h2>
+      <pre>
+        <code class="language-javascript">
+          module.exports = function (fileInfo, api, options) {
+            const { path, source } = fileInfo;
+            const { jscodeshift: j, stats } = api;
+
+            ...
+
+            return j(source)
+              .findImportStatements()
+              .forEach((path) => {
+                ... do something with path ...
+              })
+              .toSource();
+          }
+        </code>
+      </pre>
+    </section>
+
+    <section class="slide">
+      <h2>What else ?</h2>
+      <ul>
+        <li>Multi file refactorings</li>
+        <li>CSS codemods ?</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h3 class="shout">Thank you !</h3>
+      <h4>Questions ?</h4>
+    </section>
+
+    <section class="slide">
+        <h3 class="shout">See you next month at WarsawJS</h3>
+    </section>
+
+    <div class="progress"></div>
+
+    <footer class="badge">
+        <a href="https://github.com/warsawjs/warsawjs-slides-template">Fork me on GitHub</a>
+    </footer>
+
+    <footer class="badge badge-top-left">
+        <a href="#" class="fullscreen">Fullscreen</a>
+    </footer>
+
+    <script src="vendors/gamepad/gamepad.js"></script>
+    <script src="vendors/shower/shower.min.js"></script>
+    <script src="vendors/shower-gamepad/shower.gamepad.js"></script>
+    <script src="modules/fullscreen.js"></script>
+
+    <!-- Prism.js -->
+    <script src="vendors/prism/prism.js"></script>
+    <script src="modules/custom-prism.js"></script>
+</body>
+</html>
