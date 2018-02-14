@@ -14,6 +14,14 @@
     <!-- Prism.js -->
     <link rel="stylesheet" href="vendors/prism/prism.css"/>
     <link rel="stylesheet" href="modules/custom-prism.css"/>
+
+    <style>
+      .center {
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+      }
+    </style>
 </head>
 <body class="shower list">
     <header class="caption">
@@ -78,30 +86,32 @@
 
     <section class="slide">
       <h2>Refactoring</h2>
-      Refactorng is the process of restructuring existing source code without changing
-      its external behaviour.
+      <blockquote>Refactorng is the process of restructuring existing source code
+        without changing its external behaviour.</blockquote>
     </section>
 
     <section class="slide">
-      <h2>It in easy in the small scale</h2>
-      One class, several methods ... This can be done manually.
+      <h2>It is easy in the small scale</h2>
+      <p>One class, several methods ...</p>
+      <p>This can be done manually.</p>
     </section>
 
     <section class="slide">
       <h2>But what if the change is large ?</h2>
-      Think of renaming 100+ classes according to some naming schema ...
-      Modifying imports ... Changing signature of some library function ...
+      <p>Think of renaming 100+ classes according to some naming schema ...</p>
+      <p>Modifying imports after moving files ...</p>
+      <p>Changing signature of some library function ...</p>
     </section>
 
     <section class="slide">
-      <h2>We need tools to support us</h2>
-      At least partially !
+      <h2>We need tools to support us !</h2>
+      <p>At least partially !</p>
     </section>
 
     <section class="slide">
       <h2>Real life example - from</h2>
       <pre>
-        <code class="language-jsx line-numbers">
+        <code class="language-html line-numbers">
           &lt;Form&gt;
             &lt;Label&gt;Some label&lt;/Label&gt;
             &lt;Input hint="Hint text" /&gt;
@@ -114,7 +124,7 @@
     <section class="slide">
       <h2>Real life example - to</h2>
       <pre>
-        <code class="language-jsx line-numbers">
+        <code class="language-html line-numbers">
           &lt;Form&gt;
             &lt;Label tid="123"&gt;Some label&lt;/Label&gt;
             &lt;Input hint={tr("124", "Hint text")} /&gt;
@@ -125,30 +135,38 @@
     </section>
 
     <section class="slide">
-      <h2>Real life example</h2>
-      900 files, 15000+ replacements => couple of liters of coffee, almost two night w/o
-      much sleep !
+      <h2>Real life example - context</h2>
+      <p>900 files, 15000+ replacements</p>
+      <div class="center">
+        <img src="pictures/pic1.gif" />
+      </div>
+      <p>couple of liters of coffee, almost two days w/o much sleep !</p>
     </section>
 
     <section class="slide">
       <h2>And then I started to search ...</h2>
-      And found that others also had this problem ... also found ... codemods !
+      <p>Found out that others also had this problem ... and found ... codemods !</p>
+      <p class="center">
+        <img src="pictures/pic2.gif" />
+      </p>
     </section>
 
     <section class="slide">
       <h2>What is codemod ?</h2>
       <blockquote>
         Codemod is a tool/library to assist you with large-scale codebase refactors that
-        can be partially automated but still require human oversight and occasional intervention.
+        can be partially automated but still require human oversight and occasional
+        intervention.
       </blockquote>
     </section>
 
     <section class="slide">
       <h2>What this talk is about, anyway ?</h2>
-      This talk is about codemods. But not everything about them. I will concentrate on:
+      <p>This talk is about codemods. But not everything about them.</p>
+      <p>I will concentrate on:</p>
 
       <ul>
-        <li>use existing codemods and tools</li>
+        <li>how to use existing codemods and tools</li>
         <li>find materials to start writing ours</li>
       </ul>
     </section>
@@ -161,6 +179,11 @@
 
     <section class="slide">
       <h2>Tools - jscodeshift</h2>
+      <p><a
+        href="https://github.com/facebook/jscodeshift"
+        target="_blank"
+      >https://github.com/facebook/jscodeshift</a>
+      </p>
       <p>A tool to run codemods on multiple files.</p>
     </section>
 
@@ -179,14 +202,30 @@
         href="https://github.com/benjamn/ast-types"
         target="_blank"
       >https://github.com/benjamn/ast-types</a>
+      <p>JavaScript parser as well as builder</p>
     </section>
 
     <section class="slide">
       <h2>Tools - Existing codemods</h2>
       <ul>
-        <li><a href="https://github.com/cpojer/js-codemod/" target="_blank">js-codemods</a></li>
-        <li><a href=""></a></li>
-        <li><a href="https://github.com/reactjs/react-codemod" target="_blank">react-codemods</a></li>
+        <li>
+          <a href="https://github.com/cpojer/js-codemod/" target="_blank">js-codemods</a>
+        </li>
+        <li>
+          <a href="https://github.com/reactjs/react-codemod" target="_blank">react-codemods</a>
+        </li>
+        <li>
+          <a
+            href="https://github.com/sejoker/awesome-jscodeshift"
+            target="_blank"
+          >awesome-codemods</a>
+        </li>
+        <li>
+          <a
+            href="https://www.npmjs.com/package/material-ui-codemod"
+            target="_blank"
+          >material-ui-codemods</a>
+        </li>
       </ul>
     </section>
 
@@ -194,9 +233,9 @@
       <h2>How to use all this goodness ?</h2>
       <pre>
         <code class="language-shell">
-          &gt; npm install jscodeshift
+          &gt; npm install -g jscodeshift
           &gt; npm install js-codemod
-          &gt; npm run jscodeshift -t js-codemod/transforms/object-shorthand.js PATH
+          &gt; jscodeshift -t CODEMOD_PATH PATH
         </code>
       </pre>
     </section>
@@ -213,11 +252,7 @@
           module.exports = function (fileInfo, api, options) {
             const { path, source } = fileInfo;
             const { jscodeshift: j, stats } = api;
-
-            ...
-
             return j(source)
-              .findImportStatements()
               .forEach((path) => {
                 ... do something with path ...
               })
@@ -225,6 +260,30 @@
           }
         </code>
       </pre>
+    </section>
+
+    <section class="slide">
+      <h2>Codemod examples</h2>
+      <ul>
+        <li>
+          <a
+            href="https://gist.github.com/mykulyak/c7ea18d4331423a35cd70e50c3e1474f"
+            target="_blank"
+          >Sorting imports in ES files</a>
+        </li>
+        <li>
+          <a
+            href="https://gist.github.com/mykulyak/14ae073266e6181e53a87f0bd1ceec92"
+            target="_blank"
+          >Replacing components in React</a>
+        </li>
+        <li>
+          <a
+            href="https://gist.github.com/mykulyak/d35efc9ebd6ff670a5e57334c2d541b4"
+            target="_blank"
+          >Modify large amounts of (test) data</a>
+        </li>
+      </ul>
     </section>
 
     <section class="slide">
@@ -237,7 +296,6 @@
 
     <section class="slide">
       <h3 class="shout">Thank you !</h3>
-      <h4>Questions ?</h4>
     </section>
 
     <section class="slide">
